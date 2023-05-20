@@ -25,7 +25,9 @@ public class Shooting : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartCoroutine(Reload());
+
             Debug.Log("reloading");
+
         }
     }
 
