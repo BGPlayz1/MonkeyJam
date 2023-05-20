@@ -13,6 +13,18 @@ public class EnemyController : MonoBehaviour
     public float viewRange;
     bool attackCooldown;
     public float attackCooldownLength;
+    public bool isMeleeAttack;
+    public bool isRangedAttack;
+
+    public Transform firePoint;
+    public GameObject bulletPrefab;
+    public int maxBullets = 10;
+    public int bulletCounter;
+    public float bulletForce = 20f;
+    public float reloadSpeed;
+    private bool reloading;
+    private float shootDelay = 0.5f; // Adjust this value to set the desired delay between shots
+    private float shootTimer = 0f;
     public Stats stats;
 
     void Awake()
@@ -35,11 +47,53 @@ public class EnemyController : MonoBehaviour
     {
         if (player.gameObject.CompareTag("Player"))
         {
-            player.GetComponent<Stats>().CurrentHealth -= stats.Damage;
-            Debug.Log(player.GetComponent<Stats>().CurrentHealth);
-            attackCooldown = true;
+            if (isMeleeAttack)
+            {
+                meleeAttack();
+            }
+            else if (isRangedAttack)
+            {
+                rangedAttack();
+            }
+           
         }
     }
+
+    void meleeAttack()
+    {
+        player.GetComponent<Stats>().CurrentHealth -= stats.Damage;
+        Debug.Log(player.GetComponent<Stats>().CurrentHealth);
+        attackCooldown = true;
+    }
+
+    void rangedAttack()
+    {
+        //if (bulletCounter > 0 && reloading == false)
+        //{
+            //bulletCounter -= 1;
+
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            Vector2 playerDirection = (player.transform.position - firePoint.position).normalized;
+            rb.AddForce(playerDirection * bulletForce, ForceMode2D.Impulse);
+        //}
+        //else if (bulletCounter == 0 && reloading == false)
+        //{
+        //    StartCoroutine(Reload());
+        //}
+    }
+    //IEnumerator Reload()
+    //{
+    //    //animator.SetBool("Reloading", true);
+    //    reloading = true;
+    //    yield return new WaitForSeconds(reloadSpeed);
+    //    bulletCounter = maxBullets;
+    //    reloading = false;
+    //    //animator.SetBool("Reloading", false);
+    //    //isFirstShot = true;
+
+
+    //}
 
     void Update()
     {
@@ -49,25 +103,52 @@ public class EnemyController : MonoBehaviour
             Vector2 direction = player.transform.position - transform.position;
             direction.Normalize();
             float angle = Mathf.Atan2(direction.y, direction.x);
-            if (distance > attackRange)
+
+            if (isMeleeAttack)
             {
-                if (distance < viewRange)
+                if (distance > attackRange)
                 {
-                    //rb.MovePosition(Vector2.MoveTowards(this.transform.position, player.transform.position, stats.Speed
-                    //    * Time.fixedDeltaTime));
-                    //rb.rotation = angle * Mathf.Rad2Deg - 90f;  // this code makes enemy have knockback
-                    transform.SetPositionAndRotation(Vector2.MoveTowards(this.transform.position, player.transform.position, stats.Speed
-                        * Time.deltaTime), Quaternion.Euler(Vector3.forward * (angle * Mathf.Rad2Deg - 90f)));
+                    if (distance < viewRange)
+                    {
+                        //rb.MovePosition(Vector2.MoveTowards(this.transform.position, player.transform.position, stats.Speed
+                        //    * Time.fixedDeltaTime));
+                        //rb.rotation = angle * Mathf.Rad2Deg - 90f;  // this code makes enemy have knockback
+                        transform.SetPositionAndRotation(Vector2.MoveTowards(this.transform.position, player.transform.position, stats.Speed
+                            * Time.deltaTime), Quaternion.Euler(Vector3.forward * (angle * Mathf.Rad2Deg - 90f)));
+                    }
+                }
+                else
+                {
+                    if (attackCooldown == false)
+                    {
+                        Attack();
+                        StartCoroutine(AttackCooldown());
+                    }
+
                 }
             }
-            else
+            else if (isRangedAttack)
             {
-                if (attackCooldown == false)
+               
+                if (distance < viewRange)
                 {
-                    Attack();
-                    StartCoroutine(AttackCooldown());
-                }
+                    shootTimer += Time.deltaTime;
+                    if (shootTimer >= shootDelay)
+                    {
+                        Attack();
+                        shootTimer = 0f;
+                        Quaternion newRotation = Quaternion.Euler(Vector3.forward * (angle * Mathf.Rad2Deg - 90f));
+                        transform.rotation = newRotation;
 
+                    }
+                    if (distance > attackRange)
+                    {
+                        transform.SetPositionAndRotation(Vector2.MoveTowards(this.transform.position, player.transform.position, stats.Speed
+                            * Time.deltaTime), Quaternion.Euler(Vector3.forward * (angle * Mathf.Rad2Deg - 90f)));
+                            
+                            
+                    }
+                } 
             }
         }
        

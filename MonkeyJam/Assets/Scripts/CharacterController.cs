@@ -45,6 +45,7 @@ public class CharacterController : MonoBehaviour
             {
                 StartDash();
                 StartCoroutine(DashCooldown());
+                StartCoroutine(DashTimerAnimation());
             }
             
         }
@@ -90,5 +91,13 @@ public class CharacterController : MonoBehaviour
         dashOnCooldown = true;
         yield return new WaitForSeconds(dashCooldown);
         dashOnCooldown = false;
+    }
+
+    public IEnumerator DashTimerAnimation()
+    {
+
+        animator.SetBool("Rolling", true);
+        yield return new WaitForSeconds(dashDuration);
+        animator.SetBool("Rolling", false);
     }
 }

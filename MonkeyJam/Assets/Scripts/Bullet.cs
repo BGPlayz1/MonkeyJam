@@ -8,6 +8,10 @@ public class Bullet : MonoBehaviour
     public GameObject character;
 
 
+    private void Awake()
+    {
+        Destroy(gameObject, 2f);
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Stats collisionStats = collision.gameObject.GetComponent<Stats>();
@@ -18,6 +22,6 @@ public class Bullet : MonoBehaviour
         }
        
     }
-
+        
 
 }
