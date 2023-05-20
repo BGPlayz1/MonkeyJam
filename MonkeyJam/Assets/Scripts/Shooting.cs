@@ -46,7 +46,7 @@ public class Shooting : MonoBehaviour
             bulletCounter -= 1;
             GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-            rb.AddForce(firePoint.up * bulletForce, ForceMode2D.Impulse);
+            rb.AddForce(-firePoint.up * bulletForce, ForceMode2D.Impulse);
         }
         else if (bulletCounter == 0 && reloading == false)
         {

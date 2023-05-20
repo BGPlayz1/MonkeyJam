@@ -15,6 +15,7 @@ public class CharacterController : MonoBehaviour
     private float currentDashTime = 0f;
     public float dashCooldown = 3;
     bool dashOnCooldown = false;
+    public Animator animator;
 
     void Awake()
     {
@@ -23,9 +24,19 @@ public class CharacterController : MonoBehaviour
 
     void Update()
     {
+       
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+        if (movement.x > 0 || movement.y > 0 || movement.x < 0 || movement.y < 0)
+        {
+        
+            animator.SetBool("Moving", true);
+        }
+        else
+        {
+            animator.SetBool("Moving", false);
 
+        }
         mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
 
         if (Input.GetMouseButtonDown(1)) // Right mouse button pressed
@@ -56,10 +67,10 @@ public class CharacterController : MonoBehaviour
                 characterSpeed *= dashSpeedMultiplier;
             }
         }
-
+       
         rb.MovePosition(rb.position + movement * characterSpeed * Time.fixedDeltaTime);
         Vector2 lookDir = mousePos - rb.position;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
+        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg + 90f;
         rb.rotation = angle;
     }
 
