@@ -6,6 +6,8 @@ public class Bullet : MonoBehaviour
 {
     public GameObject hitEffect;
     public GameObject character;
+
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Stats collisionStats = collision.gameObject.GetComponent<Stats>();
@@ -16,4 +18,6 @@ public class Bullet : MonoBehaviour
         }
        
     }
+
+
 }
