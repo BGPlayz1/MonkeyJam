@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7493349572691514524}
   - component: {fileID: 7493349572691514523}
   - component: {fileID: 2109991936}
+  - component: {fileID: 6385200818042398129}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -106,7 +107,6 @@ MonoBehaviour:
   viewRange: 10
   attackCooldownLength: 1
   stats: {fileID: 7493349572691514523}
-  rb: {fileID: 0}
 --- !u!114 &7493349572691514523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +149,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &6385200818042398129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7493349572691514522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1177ec98d6eae364b939ba32fe9b2135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RespawnTime: 0
 --- !u!1 &7493349573317927594
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,7 +171,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7493349573317927595}
-  - component: {fileID: 413736396}
   m_Layer: 0
   m_Name: AttackPoint
   m_TagString: Untagged
@@ -181,18 +193,3 @@ Transform:
   m_Father: {fileID: 7493349572691514526}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &413736396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7493349573317927594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e447e050210e624bb213a9207addecf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  cam: {fileID: 0}
-  stats: {fileID: 7493349572691514523}
