@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CharacterController : MonoBehaviour
@@ -11,19 +12,52 @@ public class CharacterController : MonoBehaviour
     private Stats stats;
     private bool isDashing = false;
     private float dashDuration = 0.5f;
-    private float dashSpeedMultiplier = 2f;
     private float currentDashTime = 0f;
-    public float dashCooldown = 3;
     bool dashOnCooldown = false;
+    public float respawnTimer;
     public Animator animator;
+    public TextMeshProUGUI pointsText;
+    public RespawnManager respawnManager;
+
+
+    private float dashCooldown;
+    public float DashCooldown
+    {
+        get { return dashCooldown; }
+        set
+        {
+            dashCooldown = value;
+        }
+    }
+
+    private float dashSpeedMultiplier = 3.5f;
+    public float DashSpeedMultiplier
+    {
+        get { return dashSpeedMultiplier; }
+        set
+        {
+            dashSpeedMultiplier = value;
+        }
+    }
 
     void Awake()
     {
+        dashSpeedMultiplier = 3.5f;
+        dashCooldown = 3;
         stats = GetComponent<Stats>();
+        UpdatePointsText();
+        stats.PointsMultiplier = 1;
+    }
+
+  
+    private void UpdatePointsText()
+    {
+        pointsText.text = stats.MaxPoints.ToString(); // Update the text value with the bullet counter
     }
 
     void Update()
     {
+        UpdatePointsText();
        
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
@@ -44,7 +78,7 @@ public class CharacterController : MonoBehaviour
             if (dashOnCooldown == false)
             {
                 StartDash();
-                StartCoroutine(DashCooldown());
+                StartCoroutine(DashCooldownTimer());
                 StartCoroutine(DashTimerAnimation());
             }
             
@@ -86,7 +120,7 @@ public class CharacterController : MonoBehaviour
         isDashing = false;
     }
 
-    IEnumerator DashCooldown()
+    IEnumerator DashCooldownTimer()
     {
         dashOnCooldown = true;
         yield return new WaitForSeconds(dashCooldown);
@@ -100,4 +134,5 @@ public class CharacterController : MonoBehaviour
         yield return new WaitForSeconds(dashDuration);
         animator.SetBool("Rolling", false);
     }
+
 }

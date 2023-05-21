@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 0}
-  character: {fileID: 7493349572691514522, guid: c58f678e104692340ae66904c5fa8772, type: 3}
+  enemy: {fileID: 7493349572691514522, guid: c58f678e104692340ae66904c5fa8772, type: 3}
 --- !u!50 &-8133710848180413488
 Rigidbody2D:
   serializedVersion: 4

@@ -10,23 +10,31 @@ public class RandomAreaSpawner : MonoBehaviour
     private Vector2 AreaMin;
     [SerializeField]
     private Vector2 AreaMax;
+
     public void Awake()
     {
+        Vector3 referencePosition = transform.position;
         // Subscribe to death event
         Spawner.ForEach(Spawn =>
         {
-            GameObject NewEnemy = Instantiate(Spawn.Type,
-            new Vector3(Random.Range(AreaMin.x, AreaMax.x), Random.Range(AreaMin.y, AreaMax.y), 0),
-            Quaternion.identity);
+            GameObject newEnemy = Instantiate(Spawn.Type,
+                GetRandomSpawnPosition(transform.position, AreaMin, AreaMax),
+                Quaternion.identity);
 
             // duplicated code too lazy to do a function
-            EnemyRespawnable NewEnemyRespawnable = NewEnemy.GetComponent<EnemyRespawnable>();
-            NewEnemyRespawnable.RespawnTime = Spawn.RespawnTime;
-            NewEnemyRespawnable.OnDeathMessage += TriggerDeathSpawnTimer;
-            // End of duplcated code
+            EnemyRespawnable newEnemyRespawnable = newEnemy.GetComponent<EnemyRespawnable>();
+            newEnemyRespawnable.RespawnTime = Spawn.RespawnTime;
+            newEnemyRespawnable.OnDeathMessage += TriggerDeathSpawnTimer;
+            // End of duplicated code
         });
     }
 
+    private Vector3 GetRandomSpawnPosition(Vector3 referencePosition, Vector2 areaMin, Vector2 areaMax)
+    {
+        float randomX = Random.Range(referencePosition.x + areaMin.x, referencePosition.x + areaMax.x);
+        float randomY = Random.Range(referencePosition.y + areaMin.y, referencePosition.y + areaMax.y);
+        return new Vector3(randomX, randomY, 0f);
+    }
     IEnumerator Respawn(GameObject Type, float RespawnTime)
     {
         // Need to unsubscribe the event else we get memory leak

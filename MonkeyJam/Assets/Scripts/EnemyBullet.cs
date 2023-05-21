@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyBullet : MonoBehaviour
 {
     public GameObject hitEffect;
-    public GameObject character;
+    public GameObject enemy;
 
     private void Awake()
     {
@@ -24,7 +24,8 @@ public class EnemyBullet : MonoBehaviour
             Destroy(gameObject);
             if (collisionStats != null)
             {
-                collisionStats.CurrentHealth -= character.GetComponent<Stats>().Damage;
+                collisionStats.CurrentHealth -= enemy.GetComponent<Stats>().Damage;
+                Debug.Log(collisionStats.CurrentHealth);
             }
         }
     }

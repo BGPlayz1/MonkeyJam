@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -25,16 +26,23 @@ public class EnemyController : MonoBehaviour
     private bool reloading;
     private float shootDelay = 0.5f; // Adjust this value to set the desired delay between shots
     private float shootTimer = 0f;
+    public float points = 10;
     public Stats stats;
+    
 
     void Awake()
     {
+       
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
             attackPoint = player.transform;
+        stats.OnDeath += HandleDeath;
     }
 
-    // Update is called once per frame
+    private void HandleDeath()
+    {
+        player.GetComponent<Stats>().MaxPoints += (stats.GivenPoints * player.GetComponent<Stats>().PointsMultiplier);
+    }
 
 
     public IEnumerator AttackCooldown()

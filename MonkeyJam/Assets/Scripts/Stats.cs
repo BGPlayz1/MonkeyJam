@@ -19,6 +19,7 @@ public class Stats : MonoBehaviour
             currentHealth = value;
             if (currentHealth <= 0)
             {
+                
                 gameObject.SetActive(false);
                 OnDeath?.Invoke();
             }
@@ -56,6 +57,38 @@ public class Stats : MonoBehaviour
         set
         {
             damage = value;
+        }
+    }
+
+    [SerializeField]
+    private int maxPoints;
+    public int MaxPoints
+    {
+        get { return maxPoints; }
+        set
+        {
+            maxPoints = value;
+        }
+    }
+
+    [SerializeField]
+    private int givenPoints;
+    public int GivenPoints
+    {
+        get { return givenPoints; }
+        set
+        {
+            givenPoints = value;
+        }
+    }
+    [SerializeField]
+    private int pointsMultiplier;
+    public int PointsMultiplier
+    {
+        get { return pointsMultiplier; }
+        set
+        {
+            pointsMultiplier = value;
         }
     }
 }

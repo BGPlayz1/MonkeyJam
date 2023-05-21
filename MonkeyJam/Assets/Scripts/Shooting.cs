@@ -1,29 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Shooting : MonoBehaviour
 {
     public Transform firePoint;
     public GameObject bulletPrefab;
-    public int maxBullets = 10;
-    public int bulletCounter;
+    public float bulletCounter;
     public float bulletForce = 20f;
-    public float reloadSpeed;
     private bool reloading;
     public Animator animator;
     private bool isShooting = false;
     private bool isFirstShot = true;
-    private float shootDelay = 0.5f; // Adjust this value to set the desired delay between shots
     private bool isFirstShotDelayRunning = false;
     private float shootTimer = 0f;
+    public TextMeshProUGUI reloadText;
 
+    [SerializeField]
+    private float shootDelay; // Adjust this value to set the desired delay between shots
+    public float ShootDelay
+    {
+        get { return shootDelay; }  
+        set
+        {
+            shootDelay = value;
+        }
+    }
+    private float maxBullets; 
+    public float MaxBullets
+    {
+        get { return maxBullets; }
+        set
+        {
+            maxBullets = value;
+        }
+    }
+    private float reloadSpeed;
+    public float ReloadSpeed
+    {
+        get { return reloadSpeed; }
+        set
+        {
+            reloadSpeed = value;
+        }
+    }
     private void Awake()
     {
+        reloadSpeed = 3f;
+        shootDelay = 0.5f;
+        maxBullets = 10;
         bulletCounter = maxBullets;
+
+        UpdateBulletCounterText();
     }
+
+    private void UpdateBulletCounterText()
+    {
+        reloadText.text = bulletCounter.ToString() + "/" + maxBullets.ToString(); // Update the text value with the bullet counter
+    }
+
+    
+
     void Update()
     {
+        UpdateBulletCounterText();
         if (Input.GetButtonDown("Fire1"))
         {
             animator.SetBool("Shooting", true);
